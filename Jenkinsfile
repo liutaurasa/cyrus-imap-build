@@ -5,10 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Checkout Cyrus IMAP source ...'
-                checkout scmGit(
-                    branches: [[name: 'cyrus-imapd-3.6.1']],
-                    userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
-                )
+                git url: 'https://github.com/cyrusimap/cyrus-imapd.git', branche: 'cyrus-imapd-3.6.1'
                 sh 'autoreconf -i'
                 sh './configure'
                 sh 'make' 
