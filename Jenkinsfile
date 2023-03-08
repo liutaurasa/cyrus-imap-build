@@ -7,6 +7,7 @@ pipeline {
     }
     stages {
         stage('Build') {
+            steps {
             echo 'Checkout Cyrus IMAP source ...'
     checkout([$class: 'GitSCM',
               branches: [[name: "${params.TAG}"]],
@@ -16,7 +17,6 @@ pipeline {
               submoduleCfg: [],
               userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
             ])
-            steps {
                 sh 'ls -ltr'
                 sh 'autoreconf -i'
                 sh './configure'
