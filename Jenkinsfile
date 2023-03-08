@@ -5,18 +5,18 @@ pipeline {
                      type: 'PT_TAG',
                      defaultValue: 'main'
     }
+    echo 'Checkout Cyrus IMAP source ...'
+    checkout([$class: 'GitSCM',
+              branches: [[name: "${params.TAG}"]],
+              doGenerateSubmoduleConfigurations: false,
+              extensions: [],
+              gitTool: 'Default',
+              submoduleCfg: [],
+              userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
+            ])
     stages {
         stage('Build') {
             steps {
-                echo 'Checkout Cyrus IMAP source ...'
-                checkout([$class: 'GitSCM',
-                          branches: [[name: "${params.TAG}"]],
-                          doGenerateSubmoduleConfigurations: false,
-                          extensions: [],
-                          gitTool: 'Default',
-                          submoduleCfg: [],
-                          userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
-                        ])
                 sh 'ls -ltr'
                 sh 'autoreconf -i'
                 sh './configure'
