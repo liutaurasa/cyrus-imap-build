@@ -9,6 +9,7 @@ pipeline {
         stage('Build') {
             steps {
             echo 'Checkout Cyrus IMAP source ...'
+dir('cyrus-imapd') {
     checkout([$class: 'GitSCM',
               branches: [[name: "${params.TAG}"]],
               doGenerateSubmoduleConfigurations: false,
@@ -21,6 +22,7 @@ pipeline {
                 sh 'autoreconf -i'
                 sh './configure'
                 sh 'make' 
+}
             }
         }
         stage('Test') {
