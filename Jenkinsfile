@@ -1,11 +1,23 @@
 pipeline {
     agent any
-
+    parameters {
+        gitParameter name: 'TAG',
+                     type: 'PT_TAG',
+                     defaultValue: 'main'
+    }
     stages {
         stage('Build') {
             steps {
                 echo 'Checkout Cyrus IMAP source ...'
-                git url: 'https://github.com/cyrusimap/cyrus-imapd.git', branche: 'cyrus-imapd-3.6.1'
+                checkout([$class: 'GitSCM',
+                          branches: [[name: "${params.TAG}"]],
+                          doGenerateSubmoduleConfigurations: false,
+                          extensions: [],
+                          gitTool: 'Default',
+                          submoduleCfg: [],
+                          userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
+                        ])
+                sh 'ls -ltr'
                 sh 'autoreconf -i'
                 sh './configure'
                 sh 'make' 
