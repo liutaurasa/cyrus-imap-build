@@ -1,15 +1,12 @@
 pipeline {
     agent any
     parameters {
-        gitParameter name: 'TAG',
-                     type: 'PT_TAG',
-                     defaultValue: 'main'
         choice(name: 'TAG_TO_BUILD', choices: ['cyrus-imapd-3.6.1', 'main'], description: 'Specific tag to build')
     }
     stages {
         stage('Build') {
             steps {
-                echo 'Checkout Cyrus IMAP source ... '${params.tag}
+                echo "Checkout Cyrus IMAP source ... ${params.TAG_TO_BUILD}"
                 dir('cyrus-imapd') {
                     checkout([$class: 'GitSCM',
                               branches: [[name: "${params.TAG_TO_BUILD}"]],
