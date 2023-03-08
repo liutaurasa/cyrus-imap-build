@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-            echo 'Checkout Cyrus IMAP source ... ${params.tag}'
+            echo 'Checkout Cyrus IMAP source ... '${params.tag}
 dir('cyrus-imapd') {
     checkout([$class: 'GitSCM',
               branches: [[name: "${params.TAG}"]],
