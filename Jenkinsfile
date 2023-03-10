@@ -1,8 +1,8 @@
 pipeline {
     agent {
         kubernetes {
-            yamlFile Jenkins-pod.yaml
-            defaultContainer fedora
+            yamlFile 'Jenkins-pod.yaml'
+            defaultContainer 'fedora'
         }
     }
     parameters {
