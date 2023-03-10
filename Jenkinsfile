@@ -13,14 +13,14 @@ pipeline {
             steps {
                 echo 'Prepare container ... '
                 sh """
-                    dnf install -qy 
-                        @c-development check cmake
-                        sqlite-devel file-devel
-                        openssl-devel glib2-devel
-                        jansson-devel texinfo
-                        uuid-devel libxml2-devel
-                        libicu-devel zlib-devel 
-                        graphviz-devel doxygen python3-docutils help2man &&
+                    dnf install -qy \
+                        @c-development check cmake \
+                        sqlite-devel file-devel \
+                        openssl-devel glib2-devel \
+                        jansson-devel texinfo \
+                        uuid-devel libxml2-devel \
+                        libicu-devel zlib-devel \
+                        graphviz-devel doxygen python3-docutils help2man && \
                     dnf clean all
                 """
                 echo "Checkout and Build Cyrus Libraries ..."
