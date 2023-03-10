@@ -1,6 +1,9 @@
 pipeline {
     agent {
-        label 'gcc'
+        kubernetes {
+            yamlFile: Jenkins-pod.yaml
+            defaultContainer fedora
+        }
     }
     parameters {
         choice(name: 'TAG_TO_BUILD', choices: ['cyrus-imapd-3.6.1', 'main'], description: 'Specific tag to build')
@@ -19,7 +22,7 @@ pipeline {
                               userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
                             ])
                     sh 'ls -ltr'
-                    sh 'yum group install -y "Development Tools"; yum clean all'
+                    sh 'yum install -qy gc make automake autoconf libtool; yum clean all'
                     sh 'autoreconf -i'
                     sh './configure'
                     sh 'make' 
