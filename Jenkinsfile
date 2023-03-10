@@ -25,7 +25,7 @@ pipeline {
                 """
                 echo "Checkout and Build Cyrus Libraries ..."
                 dir('cyruslibs') {
-                    git https://github.com/cyrusimap/cyruslibs
+                    git 'https://github.com/cyrusimap/cyruslibs'
                     sh 'ls -ltr'
                     sh './build.sh'
                     sh 'ls -ltr /usr/loca/cyruslibs'
