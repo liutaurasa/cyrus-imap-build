@@ -11,6 +11,25 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                echo 'Prepare container ... '
+                sh """
+                    dnf install -qy 
+                        @c-development check cmake
+                        sqlite-devel file-devel
+                        openssl-devel glib2-devel
+                        jansson-devel texinfo
+                        uuid-devel libxml2-devel
+                        libicu-devel zlib-devel 
+                        graphviz-devel doxygen python3-docutils help2man &&
+                    dnf clean all
+                """
+                echo "Checkout and Build Cyrus Libraries ..."
+                dir('cyruslibs') {
+                    git https://github.com/cyrusimap/cyruslibs
+                    sh 'ls -ltr'
+                    sh './build.sh'
+                    sh 'ls -ltr /usr/loca/cyruslibs'
+                }
                 echo "Checkout Cyrus IMAP source ... ${params.TAG_TO_BUILD}"
                 dir('cyrus-imapd') {
                     checkout([$class: 'GitSCM',
@@ -22,7 +41,6 @@ pipeline {
                               userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
                             ])
                     sh 'ls -ltr'
-                    sh 'dnf install -qy @c-development sqlite-devel; dnf clean all'
                     sh 'autoreconf -i'
                     sh './configure'
                     sh 'make' 
