@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: gcc 
+spec:
+  containers:
+  - name: fedora
+    image: fedora:37
+    command:
+    - cat
+    tty: true
