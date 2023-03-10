@@ -14,7 +14,7 @@ pipeline {
                 echo 'Prepare container ... '
                 sh """
                     dnf install -qy \
-                        @c-development check cmake \
+                        @c-development check cmake git \
                         sqlite-devel file-devel \
                         openssl-devel glib2-devel \
                         jansson-devel texinfo \
