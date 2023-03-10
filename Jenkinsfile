@@ -22,7 +22,7 @@ pipeline {
                               userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
                             ])
                     sh 'ls -ltr'
-                    sh 'yum install -qy gc make automake autoconf libtool; yum clean all'
+                    sh 'dnf install -qy @c-development sqlite-devel; dnf clean all'
                     sh 'autoreconf -i'
                     sh './configure'
                     sh 'make' 
