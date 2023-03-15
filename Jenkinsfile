@@ -30,6 +30,7 @@ pipeline {
                 """
                 echo "Building RPM packages v${params.VERSION}"
                 sh "rpm-build -bb /root/rpmbuild/SPECS/cyrus-imapd.spec"
+                sh "ls -lart"
             }
         }
         stage('Test') {
