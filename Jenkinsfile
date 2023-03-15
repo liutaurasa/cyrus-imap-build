@@ -12,14 +12,15 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Prepare container ... '
+                //        jansson-devel texinfo \
+                //        libicu-devel zlib-devel \
+                //  dnf install CUnit-devel clamav-devel cyrus-sasl-md5 cyrus-sasl-plain glibc-langpack-en groff jansson-devel krb5-devel libical-devel libicu-devel libnghttp2-devel libpq-devel mariadb-connector-c-devel net-snmp-devel openldap-devel pcre-devel rsync shapelib-devel systemd transfig xapian-core-devel
                 sh """
                     dnf install -qy \
-                        @c-development check cmake git \
-                        sqlite-devel file-devel \
-                        openssl-devel glib2-devel \
-                        jansson-devel texinfo \
-                        uuid-devel libxml2-devel \
-                        libicu-devel zlib-devel \
+                        @c-development check cmake git which \
+                        sqlite-devel file-devel diffutils cyrus-sasl-devel \
+                        openssl-devel glib2-devel texinfo \
+                        uuid-devel libxml2-devel zlib-devel \
                         graphviz-devel doxygen python3-docutils help2man && \
                     dnf clean all
                 """

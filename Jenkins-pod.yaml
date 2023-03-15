@@ -10,3 +10,5 @@ spec:
     command:
     - cat
     tty: true
+    capabilities:
+      add: ["CAP_AUDIT_WRITE"]
