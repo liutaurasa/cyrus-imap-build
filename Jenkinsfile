@@ -29,7 +29,7 @@ pipeline {
                     rpm -ihv cyrus-imapd-${params.VERSION}-4.1.el8.kolab_16.src.rpm
                 """
                 echo "Building RPM packages v${params.VERSION}"
-                sh "rpm-build -bb /root/rpmbuild/SPECS/cyrus-imapd.spec"
+                sh "rpmbuild -bb /root/rpmbuild/SPECS/cyrus-imapd.spec"
                 sh "ls -lart"
             }
         }
