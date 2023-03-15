@@ -5,10 +5,10 @@ metadata:
     jenkins: gcc 
 spec:
   containers:
-  - name: fedora
-    image: fedora:37
+  - name: fedora-37
+    image: fedora-37:latest
     command:
     - cat
     tty: true
-    capabilities:
-      add: ["CAP_AUDIT_WRITE"]
+    #capabilities:
+    #  add: ["CAP_AUDIT_WRITE"]
