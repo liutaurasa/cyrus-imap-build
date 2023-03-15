@@ -6,46 +6,30 @@ pipeline {
         }
     }
     parameters {
-        choice(name: 'TAG_TO_BUILD', choices: ['cyrus-imapd-3.6.1', 'main'], description: 'Specific tag to build')
+        choice(name: 'VERSION', choices: ['3.6.1', 'main'], description: 'Get specific version SRC RPM')
     }
     stages {
         stage('Build') {
             steps {
                 echo 'Prepare container ... '
-                //        jansson-devel texinfo \
-                //        libicu-devel zlib-devel \
-                //  dnf install CUnit-devel clamav-devel cyrus-sasl-md5 cyrus-sasl-plain glibc-langpack-en groff jansson-devel krb5-devel libical-devel libicu-devel libnghttp2-devel libpq-devel mariadb-connector-c-devel net-snmp-devel openldap-devel pcre-devel rsync shapelib-devel systemd transfig xapian-core-devel
                 sh """
-                    dnf install -qy \
-                        @c-development check cmake git which \
-                        sqlite-devel file-devel diffutils cyrus-sasl-devel \
-                        openssl-devel glib2-devel texinfo \
-                        uuid-devel libxml2-devel zlib-devel \
-                        graphviz-devel doxygen python3-docutils help2man && \
+                    dnf install -qy wget rpm-build \
+                        autoconf automake bison flex gcc-c++ git glib2-devel \
+                        libtool libxml2-devel perl-Pod-Html perl-generators sqlite-devel \
+                        CUnit-devel clamav-devel cyrus-sasl-md5 cyrus-sasl-plain \
+                        glibc-langpack-en groff jansson-devel krb5-devel libical-devel \
+                        libicu-devel libnghttp2-devel libpq-devel mariadb-connector-c-devel \
+                        net-snmp-devel openldap-devel pcre-devel rsync shapelib-devel \
+                        systemd transfig xapian-core-devel && \
                     dnf clean all
                 """
-                echo "Checkout and Build Cyrus Libraries ..."
-                dir('cyruslibs') {
-                    git 'https://github.com/cyrusimap/cyruslibs'
-                    sh 'ls -ltr'
-                    sh './build.sh'
-                    sh 'ls -ltr /usr/loca/cyruslibs'
-                }
-                echo "Checkout Cyrus IMAP source ... ${params.TAG_TO_BUILD}"
-                dir('cyrus-imapd') {
-                    checkout([$class: 'GitSCM',
-                              branches: [[name: "${params.TAG_TO_BUILD}"]],
-                              doGenerateSubmoduleConfigurations: false,
-                              extensions: [],
-                              gitTool: 'Default',
-                              submoduleCfg: [],
-                              userRemoteConfigs: [[url: 'https://github.com/cyrusimap/cyrus-imapd.git']]
-                            ])
-                    sh 'ls -ltr'
-                    sh 'autoreconf -i'
-                    sh './configure'
-                    sh 'make' 
-                }
+                echo "Get cyrus-imapd src rpm package ..."
+                sh """
+                    wget https://mirror.apheleia-it.ch/repos/Kolab:/16:/Testing/CentOS_8_Stream/src/cyrus-imapd-${params.VERSION}-4.1.el8.kolab_16.src.rpm && \
+                    rpm -ihv cyrus-imapd-${params.VERSION}-4.1.el8.kolab_16.src.rpm
+                """
+                echo "Building RPM packages v${params.VERSION}"
+                sh "rpm-build -bb /root/rpmbuild/SPECS/cyrus-imapd.spec"
             }
         }
         stage('Test') {
